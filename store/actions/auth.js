@@ -18,15 +18,16 @@ export const signup = (email, password) => {
       }
     )
       .then(response => response.json())
-      .then(dispatch({ type: SIGNUP }))
+      .then(resData => { dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localid }) })
       .catch(err => {
         throw new Error('Signup went wrong!');
       })
   }
 };
+
 export const login = (email, password) => {
-  return dispatch => {
-    fetch(
+  return async dispatch => {
+    const response = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCS6et2XxcAeI3gL2XnKvGN6iqAZP2Hyv8',
       {
         method: 'POST',
@@ -39,11 +40,22 @@ export const login = (email, password) => {
           returnSecureToken: true
         })
       }
-    )
-      .then(response => response.json())
-      .then(dispatch({ type: LOGIN }))
-      .catch(err => {
-        throw new Error('Login went wrong!', err);
-      })
-  }
+    );
+
+    if (!response.ok) {
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+      let message = 'Something went wrong!';
+      if (errorId === 'EMAIL_NOT_FOUND') {
+        message = 'This email could not be found!';
+      } else if (errorId === 'INVALID_PASSWORD') {
+        message = 'This password is not valid!';
+      }
+      throw new Error(message);
+    }
+
+    const resData = await response.json();
+    console.log(resData);
+    dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localid });
+  };
 };

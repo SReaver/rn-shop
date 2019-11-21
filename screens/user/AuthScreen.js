@@ -68,28 +68,26 @@ const AuthScreen = props => {
   const authHandler = async () => {
     let action;
     if (isSignup) {
-      action =
-        authActions.signup(
-          formState.inputValues.email,
-          formState.inputValues.password
-        );
+      action = authActions.signup(
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
     } else {
-      action =
-        authActions.login(
-          formState.inputValues.email,
-          formState.inputValues.password
-        );
+      action = authActions.login(
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
     }
     setError(null);
     setIsLoading(true);
     try {
       await dispatch(action);
+      props.navigation.navigate('Shop')
     } catch (err) {
       setError(err.message);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
-
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
