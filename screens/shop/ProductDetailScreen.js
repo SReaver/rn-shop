@@ -6,10 +6,7 @@ import * as cartActions from '../../store/actions/cart';
 
 const ProductDetailScreen = props => {
   const productId = props.navigation.getParam('productId');
-  console.log(productId);
-
   const selectedProduct = useSelector(state => state.products.availableProducts.find(prod => prod.id === productId));
-  console.log(selectedProduct);
 
   const dispatch = useDispatch();
 

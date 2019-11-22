@@ -1,28 +1,7 @@
 export const ADD_ORDER = 'ADD_ORDER';
 export const SET_ORDERS = 'SET_ORDERS';
+import Order from '../../models/order';
 
-// export const fetchOrders = () => {
-//   return (dispatch, getState) => {
-//     const userId = getState().auth.userId;
-//     fetch(`https://rn-shop-9cd0d.firebaseio.com/orders/${userId}.json`)
-//       .then(response => response.json())
-//       .then((resData) => {
-//         const loadedOrders = [];
-//         for (const key in resData) {
-//           loadedOrders.push(
-//             new Order(
-//               key,
-//               resData[key].cartItems,
-//               resData[key].totalAmount,
-//               new Date(resData[key].date)
-//             )
-//           );
-//         }
-//         dispatch({ type: SET_ORDERS, orders: loadedOrders });
-//       })
-//       .catch(err => { throw new Error('Something went wrong!') });
-//   }
-// }
 export const fetchOrders = () => {
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
@@ -55,7 +34,6 @@ export const fetchOrders = () => {
   };
 };
 
-// dispatch({ type: SET_ORDERS, orders: [] })
 export const addOrder = (cartItems, totalAmount) => {
   return (dispatch, getState) => {
     const token = getState().auth.token;
